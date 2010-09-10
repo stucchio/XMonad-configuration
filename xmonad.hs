@@ -24,7 +24,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
     , ((modm, xK_Left), prevWS )
     , ((modm, xK_Right), nextWS )
-    , ((modm, xK_F1),  shellPrompt defaultXPConfig { font="-sun-open look glyph-----48-400-*-*-*-*-*-*" } )
+    , ((modm, xK_F1),  spawn "gnome-do" )
     -- close focused window
     , ((mod1Mask,           xK_F4     ), kill)
      -- Rotate through the available layout algorithms
@@ -93,17 +93,20 @@ myLayout = tiled ||| Accordion ||| Full ||| Roledex
     -- Percent of screen to increment by when resizing panes
     delta   = 3/100
 
+myManageHook = composeAll
+               [ className =? "Gimp"      --> doFloat
+               , resource =? "Do"         --> doIgnore
+               , manageHook gnomeConfig
+               , title =? "foo" --> doShift "2"
+               , isFullscreen --> doFullFloat
+               ]
 
+newManageHook = myManageHook <+> manageHook defaultConfig
 
-main = xmonad $ gnomeConfig {
-                           terminal     = "gnome-terminal",
-                           modMask      = myModMask,
-                           keys         = myKeys,
-                           layoutHook   = ( desktopLayoutModifiers myLayout ),
-                           manageHook = composeAll
-                                        [ manageHook gnomeConfig
-                                        , title =? "foo" --> doShift "2"
-                                        , isFullscreen --> doFullFloat
-                                        ],
-                           startupHook = setWMName "LG3D"
+main = xmonad $ gnomeConfig { terminal     = "gnome-terminal"
+                            , modMask      = myModMask
+                            , keys         = myKeys
+                            , layoutHook   = ( desktopLayoutModifiers myLayout )
+                            , manageHook = newManageHook
+                            , startupHook = setWMName "LG3D"
                           }
