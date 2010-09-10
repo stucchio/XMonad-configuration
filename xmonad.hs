@@ -17,14 +17,15 @@ import XMonad.Config.Desktop (desktopLayoutModifiers)
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-myModMask       = mod4Mask
+myModMask = mod4Mask
+noKeyModifier = 0
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
     , ((modm, xK_Left), prevWS )
     , ((modm, xK_Right), nextWS )
-    , ((modm, xK_F1),  spawn "gnome-do" )
+    , ((noKeyModifier, xK_F1),  spawn "gnome-do" )
     -- close focused window
     , ((mod1Mask,           xK_F4     ), kill)
      -- Rotate through the available layout algorithms
