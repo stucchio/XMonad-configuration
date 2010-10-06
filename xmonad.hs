@@ -9,8 +9,6 @@ import XMonad.Prompt
 import XMonad.Prompt.Shell
 
 -- Layouts
-import XMonad.Layout.Roledex
-import XMonad.Layout.Accordion
 import XMonad.Hooks.ManageHelpers
 import XMonad.Config.Desktop (desktopLayoutModifiers)
 
