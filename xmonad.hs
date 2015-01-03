@@ -15,7 +15,7 @@ import XMonad.Config.Desktop (desktopLayoutModifiers)
 import qualified XMonad.StackSet as W
 
 import qualified Data.Map        as M
-import Monad
+import Control.Monad
 import Data.Monoid (All (All))
 
 myModMask = mod4Mask
@@ -26,7 +26,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
     , ((modm, xK_Left), prevWS )
     , ((modm, xK_Right), nextWS )
-    , ((noKeyModifier, xK_F1),  spawn "gnome-do" )
+    -- Gnome-do
+    , ((noModMask         , xK_F1    ), spawn "gnome-do")
     -- close focused window
     , ((mod1Mask,           xK_F4     ), kill)
      -- Rotate through the available layout algorithms
@@ -101,6 +102,8 @@ myManageHook = composeAll
                , manageHook gnomeConfig
                , title =? "foo" --> doShift "2"
                , isFullscreen --> doFullFloat
+               , className =? "Unity-2d-launcher" --> doFloat
+               , className =? "Unity-2d-panel" --> doIgnore
                ]
 
 newManageHook = myManageHook <+> manageHook defaultConfig
@@ -142,4 +145,4 @@ main = xmonad $ gnomeConfig { terminal     = "gnome-terminal"
                             , manageHook = newManageHook
                             , startupHook = setWMName "LG3D"
                             , handleEventHook = totemEventHook
-                          }
+                            }
